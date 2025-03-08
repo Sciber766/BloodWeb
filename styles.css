@@ -149,3 +149,48 @@ body {
 .links a:hover {
     text-decoration: underline;
 }
+
+/* Sign-Up Page Specific Styles */
+.signup-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #0a0a0a;
+    color: white;
+    text-align: center;
+}
+
+/* Form Styling */
+.form-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 10px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+}
+
+/* Input Fields */
+.form-container input, 
+.form-container select {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: #222;
+    color: white;
+    outline: none;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    background: #333;
+}
+
+
+.links-login a:hover {
+    text-decoration: underline;
+}
