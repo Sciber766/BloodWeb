@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BloodWeb</title>
+    <link rel="icon" href="BloodWeb.jpeg">
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="box">
-        <div class="logo"><img class="logo-img" src="Untitled_design-removebg-preview.png" alt="BloodWeb"></div>
+        <div class="logo"><a href="#"><img class="logo-img" src="Untitled_design-removebg-preview.png" alt="BloodWeb"></a></div>
         <div class="innerBox">
             <div class="Left">
                 <div class="topLeft">
@@ -25,11 +27,21 @@
             </div>
             <div class="Right">
                 <div class="profileSection card">
+                    <div class="name">Naman Tiwari</div>
                     <div class="profileImg">
-                        <p>Naman Tiwari</p>
                         <img src="Snapchat-1819985218.jpg" alt="Profile">
                     </div>
-                    <div class="profileDetail"></div>
+                    <div class="ageInfo"><span id="age">20</span><span id="gender">Male</span></div>
+                    <div id="location">Madhya pradesh</div>
+                    <div class="status available"><i class="fa-solid fa-heart"></i></div>
+                    <div class="ecg">
+                        <svg class="ecg-line" viewBox="100 11 120 80">
+                            <path d="M 0 50 L 50 50 L 60 20 L 70 80 L 80 50 L 150 50 L 160 20 L 170 80 L 180 50 L 250 50" 
+                                  stroke="red" fill="transparent" stroke-width="2.5" stroke-linejoin="round"/>
+                        </svg>                        
+                    </div>
+                    <button class="logout">Logout <i class="fa-solid fa-right-from-bracket"></i></button>
+                    <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button>
                 </div>
                 <div class="iconSection card"></div>
                 <div class="timerSection card"></div>
