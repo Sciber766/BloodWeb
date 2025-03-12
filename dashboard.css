@@ -74,13 +74,11 @@
 }
 
 .bloodDetail{
-    
     height: 100%;
     width: 30%;
     
 }
 .bloodRequest{
-    
     height: 75%;
     width: 100%;
     
@@ -126,7 +124,7 @@
     border-radius: 50%;
     justify-self: right;
     object-fit: cover;
-    border: 1px solid rgba(255, 0, 0, 0.3);
+    border: 1px solid rgba(0, 85, 255, 0.3);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.499);
     transform: translate(-8px, -40px);
 }
@@ -135,56 +133,37 @@
     height: 100%;
     border-radius: 50%;
 }
-.name{
-    color: #d5d2d2;
-    width: fit-content;
-    margin-top: 20px;
-    font-size: 1.4rem;
-    font-weight: 800;
-}
+
 .ageInfo{
-    display: flex;
-    color: var(--txtColor);
-    background-color: var(--textBg);
-    font-weight: 500;
-    width: auto;
     max-width: 30%;
     min-width: 6rem;
-    align-items: center;
-    padding: 0.2rem;
-    justify-content: center;
-    border-radius: 15px;
-    cursor: pointer;
-    /* background-color: #661111; */
-    
-    border: var(--textBrd);
     gap: 8px;
     transform: translate(0px, -110px);
-}
-.ageInfo:hover {
-    background-color: ;
 }
 #age{
     padding: 0 0.5rem 0 0;
     border-right: 1px solid #d5d2d2;
 }
 #location{
-    padding: 0.2rem 1rem;
-    /* border: 1px solid rgba(209, 198, 198, 0.5); */
-    background-color: var(--textBg);
-    border-radius: 15px;
-    border: var(--textBrd);
-    width: fit-content;
     max-width: 40%;
     min-width: 6rem;
+    transform: translate(0px, -100px);    
+}
+.bullet{
+    border: var(--textBrd);
+    color: var(--txtColor);
+    background-color: var(--textBg);
+    padding: 0.2rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: 500;
     overflow: hidden;
     white-space: nowrap;
-    align-items: center;
-    font-weight: 500;
-    color: var(--txtColor);
-    transform: translate(0px, -100px);
+    width: fit-content;
     transition: all 0.2s ease-in-out;
-    cursor: pointer;
 }
 #location:hover {
     max-width: fit-content;
@@ -250,7 +229,14 @@
     }
 }
 .logout{
-    transform: translate(260px, -140px);
+    /* transform: translate(260px, -140px); */
+    position: absolute;
+    top: 254px;
+    right: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
     padding: 10px 20px;
     border-radius: 20px;
     border: 1px solid rgb(156, 156, 156);
@@ -263,9 +249,15 @@
     background-color: #cd0303;
 }
 .edit{
-    transform: translate(270px, -140px);
-    height: 40px;
-    width: 40px;
+    position: absolute;
+    top: 253px;
+    right: 25px;
+    /* transform: translate(370px, -178px); */
+    display: flex;
+    height: 38px;
+    width: 38px;
+    justify-content: center;
+    align-items: center;
     border: var(--textBrd);
     border-radius: 50%;
     color: var(--txtColor);
@@ -274,4 +266,116 @@
 }
 .edit:hover{
     background-color: var(--textBg);
+}
+
+/* Blood Details section styling */
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+    align-items: center;
+}
+.detailhead{
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    justify-content: start;
+    height: 2.2rem;
+    width: 78%;
+    margin-top: 8px;
+    padding: 0 0 0 20px;
+    border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+    border-top: 1px solid rgba(179, 179, 179, 0.3);
+    box-shadow:inset 0 0 1px rgba(252, 252, 252, 0.556), 0 0 8px rgba(40, 39, 39, 0.556);
+    font-weight: 760;
+    font-size: 1.25rem;
+    border-radius: 15px;
+    background: linear-gradient(15deg, #383838,#4a4949);
+    color: #dadada;
+    gap: 10%;
+}
+.name{
+    width: 55%;
+    padding-right: 20px;
+    font-size: 1.4rem;
+    justify-self: flex-start;
+}
+.header i{
+    height: 2.2rem;
+    width: 2.2rem;
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: #ff0a0a;
+    background: linear-gradient(15deg, #383838,#4a4949);
+    border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+    border-top: 1px solid rgba(179, 179, 179, 0.3);
+    box-shadow:inset 0 0 1px rgba(252, 252, 252, 0.556), 0 0 8px rgba(40, 39, 39, 0.556);
+    transition: all 0.3s ease-in-out;
+}
+.details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin:  20px 0 10px 0;
+}
+.Bd{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 60%;
+    gap: 10px;
+    justify-content: flex-start;
+}
+.point{
+    padding: 0 10px 0 0;
+    border-right: 1px solid #d5d2d2;
+    text-align: center;
+}
+.requestSection{
+    width: 92%;
+    height: 60%;
+}
+.writeReq{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.postReq{
+    /* margin-left: 3rem; */
+    width: 70%;
+}
+input{
+    background: none;
+    outline: none;
+    height: 100%;
+    border: none;
+    font-size: 1rem;
+    color: #f4f4f4;
+    width: 95%;
+}
+.post{
+    display: flex;
+    border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+    border-top: 1px solid rgba(179, 179, 179, 0.3);
+    box-shadow:inset 0 0 1px rgba(252, 252, 252, 0.556), 0 0 8px rgba(40, 39, 39, 0.556);
+    transition: all 0.3s ease-in-out;
+    background: linear-gradient(15deg, #383838, #4a4949);
+    height: 2.1rem;
+    width: 50px;
+    border-radius: 15px;
+    margin-top: 8px;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    color: #d5d2d2;
+    transition: all 0.3s ease-in-out;
+}
+.post:hover{
+    background: linear-gradient(15deg, #333333,#3f3f3f);
 }
