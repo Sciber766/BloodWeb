@@ -426,9 +426,11 @@
     width: 4rem;
     height: 4rem;
     font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
 }
 .toggles:hover{
     background: linear-gradient(15deg, #00065462,#005f9e6c);
+    color: #d0cfcf;
 }
 /* to be applied after turning on (pressing ones turns on) */
 .active{
@@ -439,8 +441,8 @@
     display: flex;
     align-items: flex-start;
     width: 82%;
-    margin: 20px 38px;
-    gap: 8px;
+    margin: 20px 0 10px 38px;
+    gap: 10px;
     flex-direction: column;
 }
 .ePoint{
