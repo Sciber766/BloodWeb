@@ -7,11 +7,14 @@
     <link rel="icon" href="BloodWeb.jpeg">
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="box">
-        <div class="logo"><a href="#"><img class="logo-img" src="Untitled_design-removebg-preview.png" alt="BloodWeb"></a></div>
+        <header class="flex z-50 justify-between fixed md:static ">
+            <div class="logo"><a href="#"><img class="h-[40px]" src="Untitled_design-removebg-preview.png" alt="BloodWeb"></a></div>
+        </header>
         <div class="innerBox">
             <div class="Left">
                 <div class="topLeft">
@@ -84,7 +87,7 @@
                         </div>
                         <div class="profileContainer">
                             <div class="profileImg">
-                                <img src="Snapchat-1819985218.jpg" alt="profile">
+                                <i class="fa-solid fa-circle-user"></i>
                             </div>
                             <div class="buttonHold">
                                 <button class="post logout">Logout <i class="fa-solid fa-right-from-bracket"></i></button>
