@@ -12,32 +12,36 @@
 </head>
 <body>
     <div class="box">
-        <header class="flex z-50 justify-between fixed md:static ">
+        <header class="flex justify-between">
             <div class="logo"><a href="#"><img class="h-[40px]" src="Untitled_design-removebg-preview.png" alt="BloodWeb"></a></div>
+            <nav class="block md:hidden"><i class="fa-solid fa-bars"></i></nav>
         </header>
+        <div class="rightEdit"></div>
         <div class="innerBox">
             <div class="Left">
                 <div class="topLeft">
-                    <div class="bloodDetail card">
+                    <div class="bloodDetail card relative">
                         <div class="header">
                             <i class="fa-solid fa-droplet"></i>
-                            <div class="detailhead"></i>BLOOD DETAILS</div>
+                            <div class="detailhead md:text-sm lg:text-base"></i>BLOOD DETAILS</div>
                         </div>
                         <div class="details">
-                            <div class="bullet Bd"><span class="point Bname">Blood group</span><span class="point" id="Bgroup">O+</span></div>
-                            <div class="bullet Bd"><span class="point Bname">Status</span><span class="point" id="Dstatus">Available</span></div>
-                            <div class="bullet Bd"><span class="point Bname">Last donation</span><span class="point">12-12-2005</span></div>
-                            <div class="bullet Bd"><span class="point Bname">Donor status</span><span class="point" id="Dtype">Regular</span></div>
+                            <div class="bullet Bd"><span class="Bname">Blood group</span><span class="point" id="Bgroup">O+</span></div>
+                            <div class="bullet Bd"><span class="Bname">Status</span><span class="point" id="DonationStatus">Available</span></div>
+                            <div class="bullet Bd"><span class="Bname">Last donation</span><span id="DOB">12-12-2005</span></div>
+                            <div class="bullet Bd"><span class="Bname">Donor status</span><span id="DonorType">Regular</span></div>
                         </div>
-                        <div class="buttonHold">
+                            
+                        <div class="absolute right-1 bottom-1">
                             <button class="post Dedit"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
+                        
                         
                         
                     </div>
                     <div class="topRight">
                         <div class="bloodRequest card">
-                            <div class="detailhead">BLOOD REQUESTS</div>
+                            <div class="detailhead md:text-sm lg:text-base">BLOOD REQUESTS</div>
                             <div class="requestSection detailhead">
                                 <div class="requests"></div>
                                 <div class="writeReq">
@@ -55,22 +59,23 @@
                 </div>
                 <div class="bottomLeft">
                     <div class="recentDonation card"></div>
-                    <div class="emergency card">
+                    <div class="emergency card relative">
                         <div class="detailhead">EMERGENCY DETAILS</div>
-                        <div class="eDetail">
-                            <div class="bullet"><span class="point ePoint" id="phone">+919617******</span></div>
-                            <div class="bullet"><span class="point ePoint" id="email">www.skynetc52@gmail.com</span></div>
-                            <div class="bullet"><span class="point ePoint" id="status">Available for emergency</span></div>
+                        <div class="flex flex-col gap-2">
+                            <div class="bullet ED"><span class="Bname">Mobile</span><span id="phone">+919617******</span></div>
+                            <div class="bullet ED"><span class="Bname">Email</span><span id="email">www.skynetc52@gmail.com</span></div>
+                            <div class="bullet ED"><span class="Bname">Availability</span><span id="status">Available for emergency</span></div>
                         </div>
-                        <div class="buttonHold">
+                        <div class="absolute right-1 bottom-1">
                             <button class="post Dedit"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
+
                     </div>
                 </div>
             </div>
             <div class="Right">
                 <div class="profileSection card">
-                    <div class="name detailhead">Naman Tiwari</div>
+                    <div class="name detailhead md:text-lg lg:text-xl">Naman Tiwari</div>
                     <div class="proContainer">
                         <div class="detContainer">
                             <div class="ageInfo bullet"><span id="age">20</span><span id="gender">Male</span></div>
@@ -85,9 +90,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="profileContainer">
-                            <div class="profileImg">
-                                <i class="fa-solid fa-circle-user"></i>
+                        <div class="profileContainer items-center">
+                            <div id="profile" class="flex items-center justify-center w-28 h-28 overflow-hidden rounded-full border border-[#ff00004d] shadow-[0_1px_5px_rgba(255,0,0,0.3)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="fill-[#47474a] bg-[#7d7d80]"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M399 384.2C376.9 345.8 335.4 320 288 320l-64 0c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"/></svg>
                             </div>
                             <div class="buttonHold">
                                 <button class="post logout">Logout <i class="fa-solid fa-right-from-bracket"></i></button>
@@ -108,6 +113,6 @@
         </div>
         
     </div>
-    
+    <script src="script.js"></script>
 </body>
 </html>

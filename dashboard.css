@@ -10,7 +10,7 @@
     flex-direction: column;
 }
 :root{
-    --betGap: 15px;
+    --betGap: 10px;
     --textBg: #3c3c3c;
     --hvTextBg: #505050;
     --textBrd: 1px solid rgba(103, 102, 102, 0.5);
@@ -50,7 +50,7 @@ header{
     gap: var(--betGap);
 }
 .bottomLeft{
-    height: 40%;
+    height: 38%;
     border-radius: 15px;
     display: flex;
     gap: var(--betGap);
@@ -69,6 +69,7 @@ header{
     background: linear-gradient(18deg, #000000,#525758);
     border: 1px solid rgba(255, 0, 0, 0.3);
     transition: all 0.3s ease-in-out;
+    padding: 10px;
 }
 .card:hover {
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.184);
@@ -80,11 +81,15 @@ header{
     width: 30%;
     display: flex;
     flex-direction: column;
+    gap: 8px;
 }
 .bloodRequest{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 75%;
     width: 100%;
-    
+    gap: 10px;
 }
 .requestBlood{
     
@@ -95,9 +100,7 @@ header{
 .profileSection{
     display: flex;
     flex-direction: column;
-    height: 40%;
-    width: 94%;
-    padding-left: 25px;
+    width: 100%;
 }
 .iconSection{
     height: 20%;
@@ -121,9 +124,10 @@ header{
 .emergency{
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 40%;
     height: 100%;
-    
+    gap: 8px;
 }
 .proContainer{
     display: flex;
@@ -140,21 +144,7 @@ header{
 .profileContainer{
     display: flex;
     flex-direction: column;
-}
-.profileImg{
-    display: flex;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    align-self: flex-end;
-    margin-right: 10px;
-    border: 1px solid rgba(0, 85, 255, 0.3);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.499);
-}
-.profileImg i{
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+    justify-content: space-between;
 }
 
 .ageInfo{
@@ -165,12 +155,16 @@ header{
     padding: 0 0.5rem 0 0;
     border-right: 1px solid #d5d2d2;
 }
+.buttonHold{
+    display: flex;
+    gap: 8px;
+}
 .bullet{
     border: var(--textBrd);
     color: var(--txtColor);
     background-color: var(--textBg);
-    min-width: 4.4rem;
-    padding: 0.2rem 1rem;
+    min-width: fit-content;
+    padding: 0 0.8rem;
     display: flex;
     align-items: center;
     border-radius: 15px;
@@ -204,7 +198,8 @@ header{
     background: linear-gradient(15deg, #333333,#3f3f3f);
 }
 #location{
-    max-width: 60%;    
+    width: fit-content; 
+    max-width: 70%;
 }
 #location:hover {
     max-width: fit-content;
@@ -292,44 +287,36 @@ header{
 /* Blood Details section styling */
 .header{
     display: flex;
-    justify-content: space-between;
-    margin: 0 10px;
-    align-items: center;
+    gap: 10px;
 }
 .detailhead{
     display: flex;
     justify-self: center;
-    align-self: center;
     align-items: center;
     justify-content: start;
     height: 2.2rem;
+    min-width: fit-content;
     width: 78%;
-    margin-top: 8px;
-    padding: 0 0 0 20px;
+    padding: 0 15px 0 15px;
     border-bottom: 1px solid rgba(255, 0, 0, 0.3);
     border-top: 1px solid rgba(179, 179, 179, 0.3);
     box-shadow:inset 0 0 1px rgba(252, 252, 252, 0.556), 0 0 8px rgba(40, 39, 39, 0.556);
     font-weight: 760;
-    font-size: 1.25rem;
     border-radius: 15px;
     background: linear-gradient(15deg, #383838,#4a4949);
     color: #dadada;
     gap: 10%;
     cursor: pointer;
+    flex-shrink: 0;
 }
 .name{
-    width: 55%;
-    padding-right: 20px;
-    font-size: 1.4rem;
-    justify-self: flex-start;
-    align-self: flex-start;
+    width: fit-content;
 }
 .header i{
     height: 2.2rem;
     width: 2.2rem;
     display: flex;
     justify-content: center;
-    margin-top: 8px;
     align-items: center;
     border-radius: 50%;
     font-size: 1.5rem;
@@ -345,28 +332,9 @@ header{
     width: 100%;
     flex-direction:column;
     align-items: center;
-    gap: 10px;
-    margin:  20px 0 10px 0;
+    gap: 8px;
 }
-.Bd{
-    padding: 5px 12px;
-    min-width: 70%;
-    width: fit-content;
-    gap: 10px;
-    justify-content: flex-start;
-}
-.point{
-    min-width: 40%;
-    width: fit-content;
-    text-align: start;
-    font-size: 0.9rem;
-}
-.Bname{
-    border-right: 1px solid #d5d2d2;
-    min-width: 55%;
-    font-weight: 550;
-    font-size: 1rem;
-}
+
 .requestSection{
     width: 92%;
     height: 70%;
@@ -393,15 +361,7 @@ header{
     color: #f4f4f4;
     width: 95%;
 }
-.buttonHold{
-    flex: 1;
-    display: flex;
-    margin-bottom: 6px;
-    margin-right: 5px;
-    gap: 8px;
-    align-items: flex-end;
-    justify-content: flex-end;
-}
+
 .Dedit{
     border-radius: 50%;
     width: 40px;
@@ -439,15 +399,35 @@ header{
     background: linear-gradient(15deg, #000552,#005f9e);
     color: white;
 }
-.eDetail{
-    display: flex;
-    align-items: flex-start;
-    width: 82%;
-    margin: 20px 0 10px 38px;
-    gap: 10px;
-    flex-direction: column;
-}
 .ePoint{
     font-weight: 540;
     font-size: 1rem;
+}
+
+/* BloodDetails Section */
+.Bd{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.Bname{
+    font-weight: bold;
+}
+
+/* Emergency Details Section */
+.ED{
+    width: 100%;
+    flex-direction: column;
+}
+
+@media (min-width:1024px ) {
+    
+}
+@media (min-width:768px ) {
+    
+}
+@media (min-width:640px ) {
+    
 }
