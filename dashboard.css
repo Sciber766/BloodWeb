@@ -388,7 +388,7 @@ header{
     transition: all 0.3s ease-in-out;
 }
 .toggles:hover{
-    background: linear-gradient(15deg, #00065462,#005f9e6c);
+    background: linear-gradient(15deg, #00065462,#9e00006c);
     color: #d0cfcf;
 }
 /* to be applied after turning on (pressing ones turns on) */
@@ -442,44 +442,6 @@ header{
     scrollbar-width: thin;
     scrollbar-color: #313233 #49494971;
 }
-.bloodReq{
-    border-radius: 15px;
-    width: 90%;
-    height: 28%;
-    flex-shrink: 0;
-    background: linear-gradient(12deg, #595656,#555555);
-    display: flex;
-    flex-direction: column;
-}
-.urgency3{
-    border-bottom: solid 1px rgb(179, 0, 0);
-    box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.425), 0px 1px 1px rgba(148, 0, 0, 0.634);
-}
-.urgency2{
-    border-bottom: solid 1px rgba(220, 162, 0, 0.86);
-    box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.425), 0px 1px 1px rgba(148, 0, 0, 0.634);
-}
-.urgency1{
-    border-bottom: solid 1px rgba(0, 255, 200, 0.634);
-    box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.425), 0px 1px 1px rgba(148, 0, 0, 0.634);
-}
-.reqHead{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    padding: 0 10px;
-}
-.expand{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80%;
-    cursor: pointer;
-    width: 20%;
-    border-radius: 15px;
-    background: linear-gradient(15deg, #383838,#4a4949);
-}
 
 /* .bullet2{
     border-bottom: var(--textBrd);
@@ -529,7 +491,7 @@ header{
     transition: background-color 0.2s ease-in-out;
 }
 .historyInfo:hover{
-    background-color: rgba(181, 0, 0, 0.442);
+    background-color: #2f2f2f;
     box-shadow: inset 0 0 2px  rgb(255, 255, 255), 0 0 4px rgba(245, 0, 0, 0.634);
 }
 .historyDetail{
@@ -540,6 +502,16 @@ header{
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease-in-out;
+}
+.actionDelete{
+    justify-content: center;
+    background-color: rgba(255, 0, 0, 0.401);
+    font-weight: 600;
+}
+.actionAccept{
+    justify-content: center;
+    background-color: rgba(0, 174, 255, 0.401);
+    font-weight: 600;
 }
 
 /* Blood Request form */
@@ -628,4 +600,198 @@ header{
   .hidden {
     display: none;
   }
+
+  /* sidebar for editing  */
+
+  .card{
     
+    transition: all 0.3s ease-in-out;
+    padding: 10px;
+}
+.card:hover {
+    
+}
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 97%;
+    background: linear-gradient(18deg, #000000,#525758);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 15px;
+    box-shadow: inset 0 0 5px rgb(71, 70, 70),-5px 10px 8px rgba(0, 0, 0, 0.634);
+    transition: right 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+  .sidebar:hover{
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.184);
+  }
+  
+  .sidebar.active {
+    right: 0;
+  }
+  
+  .sidebar-header button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    }
+  
+    .sidebar form label {
+        display: block;
+        color: white;
+        margin: 10px 0 5px;
+    }
+    .sidebar form input {
+        width: 100%;
+        padding: 8px;
+        background: #1e1e1e;
+        color: white;
+        border: 1px solid rgba(255, 0, 0, 0.3);
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    .sidebar form button[type="submit"] {
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        margin-top: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    .sidebar form button[type="submit"]:hover {
+        background-color: rgba(255, 0, 0, 1);
+    }
+  
+    /* Styling for notification panel  */
+
+    .notification-panel {
+        position: fixed;
+        background: linear-gradient(15deg, #00063e, #006692);
+        top: -100%; /* Hidden above screen */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50%;
+        max-height: 400px;
+        overflow-y: auto;
+        z-index: 999;
+        transition: top 0.4s ease;
+        padding: 20px;
+    }
+    
+    .notification-panel.active {
+        top: 70px; /* Slide down */
+    }
+    
+    .notificationHead{
+       background: linear-gradient(15deg, #001752, #53556e);
+       justify-content: center;
+       margin-bottom: 20px;
+       width: fit-content;
+    }
+    .notificationList{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+    }
+    /* Notification Panel is already styled earlier */
+
+/* Each Notification Card */
+.notif {
+    margin-bottom: 15px;
+    padding: 10px;
+    color: white;
+    border-radius: 12px;
+    box-shadow: inset 0 0 5px rgb(71, 70, 70), -3px 5px 6px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(18deg, #000000, #525758);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+}
+
+.notif:hover {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.25);
+    transform: scale(1.01);
+}
+
+/* Header with title and close */
+.notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notif-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #f55858;
+}
+
+.notif-close {
+    background: transparent;
+    border: none;
+    color: #f55858;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Body of notification */
+.notif-body {
+    margin-top: 8px;
+}
+
+/* Notification Details (optional block) */
+.notif-details p {
+    margin: 4px 0;
+    font-size: 0.9em;
+    color: #e0e0e0;
+}
+
+/* Actions section with buttons */
+.notif-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.notif-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notif-btn.accept {
+    background-color: #28a745;
+    color: white;
+}
+
+.notif-btn.accept:hover {
+    background-color: #218838;
+}
+
+.notif-btn.reject {
+    background-color: #dc3545;
+    color: white;
+}
+
+.notif-btn.reject:hover {
+    background-color: #c82333;
+}
