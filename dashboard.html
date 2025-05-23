@@ -16,6 +16,39 @@
             <div class="logo"><a href="#"><img class="h-[40px]" src="Untitled_design-removebg-preview.png" alt="BloodWeb"></a></div>
             <nav class="block md:hidden"><i class="fa-solid fa-bars"></i></nav>
         </header>
+        <div id="requestFormContainer" class="popup hidden">
+            <form id="requestForm">
+            <div class="detailhead">New Blood Request</div>
+            <label for="bloodGroup">Blood Group</label>
+            <select id="bloodGroup" name="bloodGroup" required>
+            <option value="">Select</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            </select>
+          
+              <label>Name:</label>
+              <input type="text" name="name" required><br>
+          
+              <label>Urgency (1-5):</label>
+              <input type="number" name="urgency" min="1" max="5" required><br>
+          
+              <label>Location:</label>
+              <input type="text" name="location" required><br>
+          
+              <label>Status:</label>
+              <input type="text" name="status" value="Pending" readonly><br>
+          
+              <button type="submit">Submit</button>
+              <button type="button" id="cancelForm">Cancel</button>
+            </form>
+          </div>
+          
         <div class="rightEdit"></div>
         <div class="innerBox">
             <div class="Left">
@@ -26,10 +59,10 @@
                             <div class="detailhead md:text-sm lg:text-base"></i>BLOOD DETAILS</div>
                         </div>
                         <div class="details">
-                            <div class="bullet Bd"><span class="Bname">Blood group</span><span class="point" id="Bgroup">O+</span></div>
-                            <div class="bullet Bd"><span class="Bname">Status</span><span class="point" id="DonationStatus">Available</span></div>
-                            <div class="bullet Bd"><span class="Bname">Last donation</span><span id="DOB">12-12-2005</span></div>
-                            <div class="bullet Bd"><span class="Bname">Donor status</span><span id="DonorType">Regular</span></div>
+                            <div class="bullet Bd"><span class="Bname">Blood group</span><span class="point" id="Bgroup"></span></div>
+                            <div class="bullet Bd"><span class="Bname">Status</span><span class="point" id="DonationStatus"></span></div>
+                            <div class="bullet Bd"><span class="Bname">Last donation</span><span id="DOB"></span></div>
+                            <div class="bullet Bd"><span class="Bname">Donor status</span><span id="DonorType"></span></div>
                         </div>
                             
                         <div class="absolute right-1 bottom-1">
@@ -43,31 +76,12 @@
                         <div class="bloodRequest card">
                             <div class="detailhead md:text-sm lg:text-base">BLOOD REQUESTS</div>
                             <div class="requestSection detailhead">
-                                <div class="requests flex w-[95%] h-full m-[8px]">
-                                    <div class="bloodReq urgency3 ">
-                                        <div class="reqHead">
-                                            <span class="BloodGroup">O+</span>
-                                            <button class="expand"><i class="fa-solid fa-caret-down"></i></button>
-                                            <span class="Location">Satna</span>
-                                        </div>
-                                        <div class="reqTail hidden">
-                                            <div>
-                                                <span class="head">Status</span>
-                                                <span class="tail">Urgent</span>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="bloodReq urgency2 "></div>
-                                    <div class="bloodReq urgency1 "></div>
-                                    <div class="bloodReq urgency1 "></div>
-                                    <div class="bloodReq urgency1 "></div>
-                                    <div class="bloodReq urgency1 "></div>
+                                <div id="requests" class="requests flex w-[95%] h-full m-[8px]">
 
                                 </div>
                                 <div class="writeReq">
                                     <!-- <div class="postReq detailhead"><input type="text" name="request" id="request" placeholder="Write something"></div> -->
-                                    <button class="post"><i class="fa-solid fa-plus"></i></button>
+                                    <button class="post" id="openForm"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
                             
@@ -79,7 +93,12 @@
                     </div>
                 </div>
                 <div class="bottomLeft">
-                    <div class="recentDonation card"></div>
+                    <div class="recentDonation card">
+                        <div class="detailhead">RECENT DONATION</div>
+                        <div id="recentDonation" class="requests flex w-[95%] h-[75%] m-[8px]">
+
+                        </div>
+                    </div>
                     <div class="emergency card relative">
                         <div class="detailhead">EMERGENCY DETAILS</div>
                         <div class="flex flex-col gap-2">
@@ -96,7 +115,7 @@
             </div>
             <div class="Right">
                 <div class="profileSection card">
-                    <div class="name detailhead md:text-lg lg:text-xl">Naman Tiwari</div>
+                    <div id="name" class="name detailhead md:text-lg lg:text-xl">Naman Tiwari</div>
                     <div class="proContainer">
                         <div class="detContainer">
                             <div class="ageInfo bullet"><span id="age">20</span><span id="gender">Male</span></div>
