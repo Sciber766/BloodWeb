@@ -563,3 +563,9 @@ createNotification(
   createNotification(
     "New Blood Request",
   );
+
+//   logout button logic 
+document.querySelector('.logout').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+});
