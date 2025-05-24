@@ -1,26 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login | BloodWeb</title>
-    <link rel="icon" href="BloodWeb.jpeg">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="BloodWeb.jpeg" />
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="page">
-    
+
     <div class="container">
         <h1 class="title">Login to BloodWeb</h1>
-        <form class="form-container">
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" required>
+        <form class="form-container" id="loginForm">
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Password" required />
             <button type="submit" class="btn">Login</button>
             <div class="links">
                 <a href="#">Forgot Password?</a>
                 <a href="signup.html">Sign Up</a>
             </div>
         </form>
+        <p id="message" style="color: red; margin-top: 10px;"></p>
     </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const message = document.getElementById('message');
+
+        // On form submit - login and check profile completion
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const password = formData.get('password');
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+
+                    // After login, check profile completion
+                    const checkResponse = await fetch('http://localhost:5000/api/user/profile/check-completion', {
+                        headers: { Authorization: `Bearer ${data.token}` }
+                    });
+                    if (!checkResponse.ok) throw new Error('Failed to check profile');
+
+                    const checkData = await checkResponse.json();
+                    
+                } else {
+                    alert(data.message || 'Login failed');
+                    message.style.color = 'red';
+                    message.textContent = data.message || 'Login failed';
+                }
+            } catch (error) {
+                message.style.color = 'red';
+                alert('Network error');
+                message.textContent = 'Error connecting to server';
+                console.error(error);
+            }
+        });
+
+        // On page load, check if token exists and validate + redirect accordingly
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            fetch('http://localhost:5000/api/user/profile/check-completion', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Invalid or expired token");
+                return res.json();
+            })
+            .then(data => {
+                if (data.missingFields && data.missingFields.length > 0) {
+                    window.location.href = 'completeSetup.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            })
+            .catch(err => {
+                console.log("Failed to check profile completion:", err.message);
+                localStorage.removeItem("token");
+            });
+        } else {
+            console.log("No token found, waiting for user to login.");
+        }
+    </script>
 
 </body>
 </html>
