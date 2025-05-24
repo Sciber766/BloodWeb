@@ -165,7 +165,7 @@
         }
       
         // Optional: verify token with backend
-        fetch('http://localhost:5000/api/auth/verify', {
+        fetch('https://bloodweb-dbackend.onrender.com/api/auth/verify', {
           method: 'GET',
           headers: {
             'Authorization': 'Bearer ' + token

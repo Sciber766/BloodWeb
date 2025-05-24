@@ -1,6 +1,7 @@
 function redirectTo(page) {
     window.location.href = page;
 }
+const BASE_URL = 'https://bloodweb-dbackend.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
@@ -20,19 +21,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   
     // Fetch all data in parallel
-    const profilePromise = fetch('http://localhost:5000/api/user/profile', { headers })
+    const profilePromise = fetch(`${BASE_URL}api/user/profile`, { headers })
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch profile');
         return res.json();
       });
   
-    const bloodPromise = fetch('http://localhost:5000/api/user/blood-details', { headers })
+    const bloodPromise = fetch(`${BASE_URL}/api/user/blood-details`, { headers })
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch blood details');
         return res.json();
       });
   
-    const emergencyPromise = fetch('http://localhost:5000/api/user/emergency', { headers })
+    const emergencyPromise = fetch(`${BASE_URL}/api/user/emergency`, { headers })
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch emergency details');
         return res.json();
@@ -173,7 +174,7 @@ let emergencyDisplayFunc ={
 
 function updateAvailability(status) {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:5000/api/user/availability', {
+    fetch(`${BASE_URL}/api/user/availability`, {
         method: 'PATCH',
         headers: {
             'Authorization': 'Bearer ' + token,
@@ -189,7 +190,7 @@ function updateAvailability(status) {
 
 function updateEmergencyStatus(status) {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:5000/api/user/emergency', {
+    fetch(`${BASE_URL}/api/user/emergency`, {
         method: 'PATCH',
         headers: {
             'Authorization': 'Bearer ' + token,
@@ -240,7 +241,7 @@ async function fetchMatchingRequests() {
     }
   
     try {
-      const res = await fetch('http://localhost:5000/api/request/match', {
+      const res = await fetch(`${BASE_URL}/api/request/match`, {
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + token
@@ -273,7 +274,7 @@ async function fetchMyRequests() {
     }
   
     try {
-      const res = await fetch('http://localhost:5000/api/request/mine', {
+      const res = await fetch(`${BASE_URL}/api/request/mine`, {
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + token
@@ -459,7 +460,7 @@ requestForm.addEventListener('submit', async (e) => {
     };
   
     try {
-      const response = await fetch('http://localhost:5000/api/request/blood-request', {
+      const response = await fetch(`${BASE_URL}/api/request/blood-request`, {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + token,
