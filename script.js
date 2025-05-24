@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   
     // Fetch all data in parallel
-    const profilePromise = fetch(`${BASE_URL}api/user/profile`, { headers })
+    const profilePromise = fetch(`${BASE_URL}/api/user/profile`, { headers })
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch profile');
         return res.json();
@@ -300,10 +300,6 @@ fetchMyRequests().then(requests => {
     }
 });
 
-
-for(let i = bloodRequests.length - 1; i >= 0; i--){
-    displayBloodRequests(bloodRequests[i]);
-}
 function displayBloodRequests(data, isMyRequest){
     let requestContainer = document.querySelector('#requests');
     console.log(data);
