@@ -27,6 +27,7 @@
         const form = document.getElementById('loginForm');
         const message = document.getElementById('message');
 
+        // On form submit - login and check profile completion
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -44,14 +45,16 @@
                 const data = await response.json();
                 
                 if (response.ok) {
-                    // ✅ Save token to localStorage
                     localStorage.setItem('token', data.token);
-                    window.location.href = 'dashboard.html';
-                    message.style.color = 'green';
-                    message.textContent = data.message;
-                    // Optionally save the token in localStorage for authenticated requests later
-                    localStorage.setItem('token', data.token);
-                    // Redirect or update UI here if you want
+
+                    // After login, check profile completion
+                    const checkResponse = await fetch('http://localhost:5000/api/user/profile/check-completion', {
+                        headers: { Authorization: `Bearer ${data.token}` }
+                    });
+                    if (!checkResponse.ok) throw new Error('Failed to check profile');
+
+                    const checkData = await checkResponse.json();
+                    
                 } else {
                     alert(data.message || 'Login failed');
                     message.style.color = 'red';
@@ -64,6 +67,32 @@
                 console.error(error);
             }
         });
+
+        // On page load, check if token exists and validate + redirect accordingly
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            fetch('http://localhost:5000/api/user/profile/check-completion', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Invalid or expired token");
+                return res.json();
+            })
+            .then(data => {
+                if (data.missingFields && data.missingFields.length > 0) {
+                    window.location.href = 'completeSetup.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            })
+            .catch(err => {
+                console.log("Failed to check profile completion:", err.message);
+                localStorage.removeItem("token");
+            });
+        } else {
+            console.log("No token found, waiting for user to login.");
+        }
     </script>
 
 </body>

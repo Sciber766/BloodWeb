@@ -2,38 +2,59 @@ function redirectTo(page) {
     window.location.href = page;
 }
 
-function loadData (){
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+  });
 
-}
-
-// user data which would later be fetched and served from database
-
-let bloodDetails = {
-    bloodGroup : "O+",
-    Status : 1,
-    lastDonation : "12-34-2255",
-    donorStatus : "Regular"
-};
-
-let profile = {
-    name : "Naman Tiwari",
-    age : "19",
-    gender : "Male",
-    address : "Madhya Pradesh, Satna"
-
-};
-
-let emergencyDetails = {
-    phone : "9232202233",
-    email : "example@gmail.com",
-    emergencyAvailability : 1
-}
-
+  function loadData() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in.');
+      window.location.href = 'login.html';
+      return;
+    }
+  
+    const headers = {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    };
+  
+    // Fetch all data in parallel
+    const profilePromise = fetch('http://localhost:5000/api/user/profile', { headers })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch profile');
+        return res.json();
+      });
+  
+    const bloodPromise = fetch('http://localhost:5000/api/user/blood-details', { headers })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch blood details');
+        return res.json();
+      });
+  
+    const emergencyPromise = fetch('http://localhost:5000/api/user/emergency', { headers })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch emergency details');
+        return res.json();
+      });
+  
+    // Combine all promises
+    Promise.all([profilePromise, bloodPromise, emergencyPromise])
+      .then(([profileData, bloodDetailsData, emergencyData]) => {
+        displayProfile(profileData, bloodDetailsData.availability);
+        displayBloodDetails(bloodDetailsData);
+        displayEmergencyDetails(emergencyData);
+      })
+      .catch(err => {
+        console.error('Error loading data:', err);
+      });
+  }
+  
 // function to get blood details and display them
 
 function displayBloodDetails(data){
     bloodDetailsFunc.displayBloodGroup(data.bloodGroup);
-    bloodDetailsFunc.displayStatus(data.Status);
+    bloodDetailsFunc.displayStatus(data.availability);
     bloodDetailsFunc.displayLastDonation(data.lastDonation);
     bloodDetailsFunc.displayDonorStatus(data.donorStatus);
 }
@@ -67,16 +88,13 @@ let bloodDetailsFunc = {
 
 }
 
-// displaying the local variable data
-displayBloodDetails(bloodDetails);
-
 // functions to display profile details from the fetched data
 
 function displayProfile(data, status){
-    profileDisplayFunc.displayName(data.name);
+    profileDisplayFunc.displayName(data.fullName);
     profileDisplayFunc.displayAge(data.age);
     profileDisplayFunc.displayGender(data.gender);
-    profileDisplayFunc.displayAddress(data.address);
+    profileDisplayFunc.displayAddress(data.location);
     profileDisplayFunc.displayStatus(status);
 }
 
@@ -101,7 +119,7 @@ let profileDisplayFunc ={
         let heart = document.querySelector(".status");
         let ecgPath = document.querySelector('.ecg-line path');
         let ecg = document.querySelector('.ecg');
-        if(data == 1){
+        if(data == true){
             heart.classList.add("available");
             ecg.classList.add("ecg-active");
             ecgPath.setAttribute('stroke', 'red');
@@ -115,16 +133,13 @@ let profileDisplayFunc ={
     },
     displayAvailabilityToggle(data){
         let avButton = document.querySelector('.avButton');
-        if(data == 1){
+        if(data == true){
             avButton.classList.add('active');
         }else{
             avButton.classList.remove('active');
         }
     }
 }
-
-// calling the function with local variable values
-displayProfile(profile, bloodDetails.Status);
 
 // function to display emergency contact details from fetched data
 function displayEmergencyDetails(data){
@@ -156,9 +171,37 @@ let emergencyDisplayFunc ={
     }
 }
 
-// calling the function with local variable data
-displayEmergencyDetails(emergencyDetails);
+function updateAvailability(status) {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:5000/api/user/availability', {
+        method: 'PATCH',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ availability: status })
+    })
+    .then(res => res.ok ? res.json() : Promise.reject('Failed to update availability'))
+    .then(data => console.log('Availability updated', data))
+    .then(() =>  loadData())
+    .catch(err => alert(err));
+}
 
+function updateEmergencyStatus(status) {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:5000/api/user/emergency', {
+        method: 'PATCH',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ emergencyAvailability: status })
+    })
+    .then(res => res.ok ? res.json() : Promise.reject('Failed to update emergency status'))
+    .then(data => console.log('Emergency status updated', data))
+    .then(() =>  loadData())
+    .catch(err => alert(err));
+}
 
 // toggle for the donor status .. available for donation or nota
 let heart = document.querySelector(".status");
@@ -172,69 +215,98 @@ heart.addEventListener("click", function() {
     ecg.classList.toggle('ecg-active');
     if (currentStroke === "red") {
         ecgPath.setAttribute('stroke', '');
-        bloodDetails.Status = 0;
+        updateAvailability(false);
     } else {
         ecgPath.setAttribute('stroke', 'red');
-        bloodDetails.Status = 1;
+        updateAvailability(true);
     }
-    displayBloodDetails(bloodDetails);
 });
 
-let bloodRequests = [
-    [
-        {
-            name : "O+",
-            value : "12-12-2005"
-        },
-        {
-            name : "Name",
-            value : "Rahul Maurya"
-        },
-        {
-            name : "Urgency",
-            value : "2"
-        },
-        {
-            name : "Location",
-            value : "Satna"
-        },
-        {
-            name : "Status",
-            value : "Verified"
-        },
-    ],
-    [
-        {
-            name : "AB+",
-            value : "12-12-2005"
-        },
-        {
-            name : "Name",
-            value : "Rahul Maurya"
-        },
-        {
-            name : "Urgency",
-            value : "2"
-        },
-        {
-            name : "Location",
-            value : "Satna"
-        },
-        {
-            name : "Status",
-            value : "Verified"
-        },
-    ]
-    
-]
+function formatRequestToArray(request, userName) {
+    return [
+      { name: request.bloodGroup, value: new Date(request.date).toLocaleDateString() },
+      { name: "Name", value: request.name || "Unknown" },
+      { name: "Urgency", value: request.urgency },
+      { name: "Location", value: request.location },
+      { name: "Status", value: request.status }
+    ];
+  }
+  
+async function fetchMatchingRequests() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in');
+      return [];
+    }
+  
+    try {
+      const res = await fetch('http://localhost:5000/api/request/match', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+  
+      if (!res.ok) throw new Error('Failed to fetch matching requests');
+  
+      const requests = await res.json();
+      return requests;
+    } catch (err) {
+      console.error('Error fetching matching requests:', err);
+      return [];
+    }
+  }
+  
+fetchMatchingRequests().then(requests => {
+    for (request of requests) {
+        let formatted = formatRequestToArray(request, request.userName);
+        console.log(formatted);
+        displayBloodRequests(formatted);  // displayBloodRequests expects an array
+    }
+});
+
+async function fetchMyRequests() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in');
+      return [];
+    }
+  
+    try {
+      const res = await fetch('http://localhost:5000/api/request/mine', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+  
+      if (!res.ok) throw new Error('Failed to fetch your requests');
+  
+      const requests = await res.json();
+      return requests; // Array of request objects
+    } catch (err) {
+      console.error('Error fetching your requests:', err);
+      return [];
+    }
+  }
+  
+fetchMyRequests().then(requests => {
+    console.log(requests);
+    for (request of requests) {
+        let formatted = formatRequestToArray(request, request.userName);
+        console.log(formatted);
+        displayBloodRequests(formatted,true );  // displayBloodRequests expects an array
+    }
+});
 
 
 for(let i = bloodRequests.length - 1; i >= 0; i--){
     displayBloodRequests(bloodRequests[i]);
 }
-function displayBloodRequests(data){
+function displayBloodRequests(data, isMyRequest){
     let requestContainer = document.querySelector('#requests');
-    addHistory(data, requestContainer);
+    console.log(data);
+    addHistory(data, requestContainer, isMyRequest);
 }
 
 let recentDonations = [
@@ -294,7 +366,7 @@ function displayRecentDonations(data){
     addHistory(data, recentDonationContainer);
 }
 
-function addHistory(data, Element){
+function addHistory(data, Element, isMyRequest){
     let sales = Element;
     let history = document.createElement('div');
     history.classList.add('bullet', 'history');
@@ -310,11 +382,11 @@ function addHistory(data, Element){
     }
     
     // Add Accept/Delete Button if in requests section
-    if (Element.id === "requests") {
+    if (isMyRequest) {
         const userName = data.find(obj => obj.name === "Name")?.value;
+        createActionButton(historyDetail, 'delete');
+    }else{
         createActionButton(historyDetail, 'accept');
-        
-        
     }
     
     addToggle(history, historyDetail);
@@ -360,37 +432,56 @@ function addToggle(toggleBox, child) {
         }
     })
 }
-
-const formContainer = document.getElementById('requestFormContainer');
-const requestForm = document.getElementById('requestForm');
-const cancelFormBtn = document.getElementById('cancelForm');
-const addBtn = document.querySelector('#openForm'); // the '+' button
-
-addBtn.addEventListener('click', () => {
-    formContainer.classList.remove('hidden');
+let openForm = document.querySelector('#openForm');
+openForm.addEventListener('click', () => {
+    const formContainer = document.querySelector('#requestFormContainer');
+    formContainer.classList.toggle('hidden');
 });
-
-cancelFormBtn.addEventListener('click', () => {
-    formContainer.classList.add('hidden');
+let cancelForm = document.querySelector('#cancelForm');
+cancelForm.addEventListener('click', () => {
+    const formContainer = document.querySelector('#requestFormContainer');
+    formContainer.classList.toggle('hidden');
 });
-
-requestForm.addEventListener('submit', (e) => {
+requestForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in');
+      return;
+    }
+  
     const formData = new FormData(requestForm);
-    const newRequest = [
-        { name: formData.get("bloodGroup"), value: new Date().toLocaleDateString() },
-        { name: "Name", value: formData.get("name") },
-        { name: "Urgency", value: formData.get("urgency") },
-        { name: "Location", value: formData.get("location") },
-        { name: "Status", value: formData.get("status") }
-    ];
-
-    bloodRequests.push(newRequest);
-    addHistory(newRequest);
-    requestForm.reset();
-    formContainer.classList.add('hidden');
-});
+    const requestData = {
+      bloodGroup: formData.get("bloodGroup"),
+      urgency: Number(formData.get("urgency")),
+      location: formData.get("location")
+    };
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/request/blood-request', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      });
+  
+      if (!response.ok) throw new Error('Failed to submit request');
+  
+      const savedRequest = await response.json();
+      addHistory(savedRequest, document.querySelector('#requests')); // or your UI function
+  
+      requestForm.reset();
+      formContainer.classList.add('hidden');
+      alert('Request submitted successfully!');
+    } catch (err) {
+      console.error(err);
+      alert('Error submitting request');
+    }
+  });
+  
 
 const editButton = document.querySelector('#editProfile'); // your edit icon
 const editButton2 = document.querySelector('#editEmergencyDetails');
@@ -484,24 +575,22 @@ let avButton = document.querySelector('.avButton');
 avButton.addEventListener('click', ()=>{
     if(avButton.classList.contains('active') ){
         avButton.classList.remove('active');
-        bloodDetails.Status = 0;
+        updateAvailability(false);
     }else{
         avButton.classList.add('active');
-        bloodDetails.Status = 1;
+        updateAvailability(true);
     }
-    displayBloodDetails(bloodDetails);
 })
 
 let emergencyButton = document.querySelector('.emergencyButton');
 emergencyButton.addEventListener('click', ()=>{
     if(emergencyButton.classList.contains('active') ){
         emergencyButton.classList.remove('active');
-        emergencyDetails.emergencyAvailability = 0;
+        updateEmergencyStatus(false);
     }else{
         emergencyButton.classList.add('active');
-        emergencyDetails.emergencyAvailability = 1;
+        updateEmergencyStatus(true);
     }
-    displayEmergencyDetails(emergencyDetails);
 })
 
 const notificationButton = document.querySelector('.notification');

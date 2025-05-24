@@ -14,7 +14,7 @@
         <form class="form-container" id="registerForm">
             <input type="text" placeholder="Full Name" name="name" required />
             <input type="email" placeholder="Email" name="email" required />
-            <select name="bloodType" required>
+            <select name="bloodGroup" required>
                 <option value="" disabled selected>Select Blood Type</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -44,7 +44,7 @@
 
             const fullName = form.name.value.trim();
             const email = form.email.value.trim();
-            const bloodType = form.bloodType.value;
+            const bloodGroup = form.bloodGroup.value;
             const password = form.password.value;
             const confirmPassword = form.confirmPassword.value;
 
@@ -60,7 +60,7 @@
                 const res = await fetch('http://localhost:5000/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ fullName, email, password, bloodType })
+                    body: JSON.stringify({ fullName, email, password, bloodGroup })
                 });
 
                 const data = await res.json();
