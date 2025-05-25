@@ -229,7 +229,8 @@ function formatRequestToArray(request, userName) {
       { name: "Name", value: request.name || "Unknown" },
       { name: "Urgency", value: request.urgency },
       { name: "Location", value: request.location },
-      { name: "Status", value: request.status }
+      { name: "Status", value: request.status },
+      { name: "_id", value: request._id }
     ];
   }
   
@@ -369,7 +370,11 @@ function addHistory(data, Element, isMyRequest){
     history.classList.add('bullet', 'history');
     sales.appendChild(history);
     createInfo(history, data[0]);
-    
+    const requestIdObj = data.find(obj => obj.name.toLowerCase() === "_id");
+    if (requestIdObj) {
+        history.setAttribute('data-id', requestIdObj.value);
+    }
+
     let historyDetail = document.createElement('div');
     historyDetail.classList.add('historyDetail');
     history.appendChild(historyDetail);
@@ -403,7 +408,8 @@ function createActionButton(object, action){
     object.appendChild(actionButton);
 }
 
-function createInfo(object, data, isRequest){
+function createInfo(object, data){
+    if (data.name === "_id") return
     let historyInfo = document.createElement('div');
     historyInfo.classList.add('historyInfo');
     let name = document.createElement('span');
@@ -649,6 +655,62 @@ createNotification(
   createNotification(
     "New Blood Request",
   );
+  document.addEventListener('click', async (event) => {
+    const deleteBtn = event.target.closest('.actionDelete');
+    const acceptBtn = event.target.closest('.actionAccept');
+
+    if (!deleteBtn && !acceptBtn) return;
+
+    const historyBlock = event.target.closest('.history');
+    const requestId = historyBlock?.getAttribute('data-id');
+    if (!requestId) {
+        console.error("No request ID found in element.");
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('You must be logged in.');
+        return;
+    }
+
+    try {
+        if (deleteBtn) {
+            // DELETE request
+            const res = await fetch(`${BASE_URL}/api/request/${requestId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (!res.ok) throw new Error("Failed to delete request");
+
+            // Remove the request from DOM
+            historyBlock.remove();
+            console.log("Request deleted:", requestId);
+        }
+
+        if (acceptBtn) {
+            // PUT or POST to accept request (depending on your API)
+            const res = await fetch(`${BASE_URL}/api/request/${requestId}/accept`, {
+                method: 'PUT', // or POST, based on your backend
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!res.ok) throw new Error("Failed to accept request");
+
+            // Update UI (optional: change button/status)
+            alert("Request accepted successfully.");
+        }
+    } catch (err) {
+        console.error("Error:", err);
+        alert(err.message);
+    }
+});
 
 //   logout button logic 
 document.querySelector('.logout').addEventListener('click', () => {
