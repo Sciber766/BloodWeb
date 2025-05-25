@@ -427,7 +427,8 @@ function createInfo(object, data){
 
 
 function addToggle(toggleBox, child) {
-    toggleBox.addEventListener('click', ()=>{
+    toggleBox.addEventListener('click', (e)=>{
+        if (e.target.closest('button')) return;
         if (child.style.maxHeight){
             child.style.maxHeight = null;
         }else{
@@ -474,9 +475,17 @@ requestForm.addEventListener('submit', async (e) => {
       if (!response.ok) throw new Error('Failed to submit request');
   
       const savedRequest = await response.json();
-      addHistory(savedRequest, document.querySelector('#requests')); // or your UI function
+      fetchMyRequests().then(requests => {
+        console.log(requests);
+        for (request of requests) {
+            let formatted = formatRequestToArray(request, request.userName);
+            console.log(formatted);
+            displayBloodRequests(formatted,true );
+        }
+      });
   
       requestForm.reset();
+      const formContainer = document.querySelector('#requestFormContainer');
       formContainer.classList.add('hidden');
       alert('Request submitted successfully!');
     } catch (err) {
@@ -628,8 +637,7 @@ function createNotification(title, message, details = {}, showActions = false) {
             ${
                 showActions
                     ? `<div class="notif-actions">
-                        <button class="notif-btn accept">Accept</button>
-                        <button class="notif-btn reject">Reject</button>
+                        <button class="notif-btn donorAccept">Accept</button>
                     </div>`
                     : ''
             }
@@ -645,22 +653,40 @@ function createNotification(title, message, details = {}, showActions = false) {
 }
 
 // You can test it
-createNotification(
-    "New Blood Request",
-    "Rahul Sharma needs O+ blood urgently.",
-    { Location: "City Hospital", "Contact": "+91 9876543210" },
-    true
-  );
+async function fetchNotifications() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
   
-  createNotification(
-    "New Blood Request",
-  );
+    try {
+      const res = await fetch(`${BASE_URL}/api/users/notifications`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+  
+      if (!res.ok) throw new Error('Failed to fetch notifications');
+  
+      const data = await res.json();
+      const notifications = data.notifications;
+  
+      notifications.forEach(notif => {
+        createNotification(notif.title, notif.message, Object.fromEntries(notif.details || []));
+      });
+  
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  }
+  
+  // Call on page load
+  fetchNotifications();
+  
   document.addEventListener('click', async (event) => {
     const deleteBtn = event.target.closest('.actionDelete');
     const acceptBtn = event.target.closest('.actionAccept');
 
     if (!deleteBtn && !acceptBtn) return;
-
+    event.stopPropagation();
     const historyBlock = event.target.closest('.history');
     const requestId = historyBlock?.getAttribute('data-id');
     if (!requestId) {
@@ -692,20 +718,35 @@ createNotification(
         }
 
         if (acceptBtn) {
-            // PUT or POST to accept request (depending on your API)
+            acceptBtn.disabled = true; // Immediately disable to prevent double click
+            acceptBtn.textContent = "Accepting...";
+
             const res = await fetch(`${BASE_URL}/api/request/${requestId}/accept`, {
-                method: 'PUT', // or POST, based on your backend
+                method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json'
                 }
             });
 
-            if (!res.ok) throw new Error("Failed to accept request");
-
-            // Update UI (optional: change button/status)
-            alert("Request accepted successfully.");
+            if (!res.ok) {
+                const errorData = await res.json();
+                
+                if(errorData.message == "You have already accepted this request"){
+                    acceptBtn.disabled = true;
+                    acceptBtn.textContent = "Already Accepted";
+                    console.error('Accept request error:', errorData.message);
+                }else{
+                    acceptBtn.disabled = false;
+                    console.error('Accept request error:', errorData.message);
+                    throw new Error(errorData.message);
+                }
+            }else{
+                acceptBtn.textContent = "Accepted";
+                alert("Request accepted successfully.");
+            }
         }
+        
     } catch (err) {
         console.error("Error:", err);
         alert(err.message);
