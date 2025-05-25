@@ -658,7 +658,7 @@ async function fetchNotifications() {
     if (!token) return;
   
     try {
-      const res = await fetch(`${BASE_URL}/api/users/notifications`, {
+      const res = await fetch(`${BASE_URL}/api/request/notifications`, {
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -703,6 +703,8 @@ async function fetchNotifications() {
     try {
         if (deleteBtn) {
             // DELETE request
+            deleteBtn.disabled = true; // Immediately disable to prevent double click
+            deleteBtn.textContent = "Deleting...";
             const res = await fetch(`${BASE_URL}/api/request/${requestId}`, {
                 method: 'DELETE',
                 headers: {
