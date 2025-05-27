@@ -9,18 +9,22 @@ fetch(`${BASE_URL}/api/user/profile`, {
 .then(res => res.json())
 .then(data => {
     const userId = data._id;
-    socket.emit('join', userId); // join the private room
+    socket.emit('join', userId);
 });
 socket.on('notification', (data) => {
-    // use your existing function to show the notification
-    createNotification(data.title, data.message, Object.fromEntries(data.details), true);
-  });
-  
+    createNotification(data.title, data.message, data.details, true, true);
+    console.log('Notification received:', data);
+});
+socket.on('new-blood-request', (data) => {
+    console.log('🔔 New blood request:', data);
+    const formatted = formatRequestToArray(data.request);
+    displayBloodRequests(formatted);
+});
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
   });
-  
-function checkLogin(token) {
+
+  function checkLogin(token) {
     if (!token) {
         alert('You must be logged in.');
         window.location.href = 'login.html';
@@ -111,6 +115,16 @@ function displayProfile(data, status){
     profileDisplayFunc.displayGender(data.gender);
     profileDisplayFunc.displayAddress(data.location);
     profileDisplayFunc.displayStatus(status);
+    fetchMatchingRequests(status).then(requests => {
+        if(requests !== undefined)
+        {
+            for (request of requests) {
+                let formatted = formatRequestToArray(request, request.userName);
+                console.log(formatted);
+                displayBloodRequests(formatted);  // displayBloodRequests expects an array
+            }
+        }
+    });
 }
 
 let profileDisplayFunc ={
@@ -248,35 +262,28 @@ function formatRequestToArray(request, userName) {
     ];
   }
   
-async function fetchMatchingRequests() {
-    
+async function fetchMatchingRequests(status) {
     checkLogin(token);
-  
-    try {
-      const res = await fetch(`${BASE_URL}/api/request/match`, {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + token
+    if(status){
+        try {
+            const res = await fetch(`${BASE_URL}/api/request/match`, {
+              method: 'GET',
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });
+        
+            if (!res.ok) throw new Error('Failed to fetch matching requests');
+        
+            const requests = await res.json();
+            return requests;
+        } catch (err) {
+            console.error('Error fetching matching requests:', err);
+            return [];
         }
-      });
-  
-      if (!res.ok) throw new Error('Failed to fetch matching requests');
-  
-      const requests = await res.json();
-      return requests;
-    } catch (err) {
-      console.error('Error fetching matching requests:', err);
-      return [];
     }
+  
   }
-  
-fetchMatchingRequests().then(requests => {
-    for (request of requests) {
-        let formatted = formatRequestToArray(request, request.userName);
-        console.log(formatted);
-        displayBloodRequests(formatted);  // displayBloodRequests expects an array
-    }
-});
 
 async function fetchMyRequests() {
     
@@ -456,12 +463,8 @@ cancelForm.addEventListener('click', () => {
 });
 requestForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-  
     
-    if (!token) {
-      alert('You must be logged in');
-      return;
-    }
+    checkLogin(token);
   
     const formData = new FormData(requestForm);
     const requestData = {
@@ -622,10 +625,9 @@ notificationButton.addEventListener('click', () => {
 const notificationList = document.getElementById('notificationList');
 
 // Example notification
-function createNotification(title, message, details = {}, showActions = false) {
+function createNotification(title, message, details = {}, showActions = false ,live = false) {
     const li = document.createElement('li');
     li.className = 'notification card';
-
     li.innerHTML = `
         <div class="notif-header">
             <span class="notif-title">${title}</span>
@@ -657,8 +659,11 @@ function createNotification(title, message, details = {}, showActions = false) {
     li.querySelector('.notif-close').addEventListener('click', () => {
         li.remove();
     });
-
-    document.getElementById('notificationList').appendChild(li);
+    if(live){
+        document.getElementById('notificationList').prepend(li);
+    }else{
+        document.getElementById('notificationList').appendChild(li);
+    }
 }
 
 // You can test it
