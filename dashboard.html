@@ -156,39 +156,7 @@
         </div>
         
     </div>
-    <script>
-        const token = localStorage.getItem('token');
-      
-        if (!token) {
-          alert('You must be logged in to access the dashboard.');
-          window.location.href = 'login.html';
-        }
-      
-        // Optional: verify token with backend
-        fetch('https://bloodweb-dbackend.onrender.com/api/auth/verify', {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        })
-        .then(res => {
-          if (!res.ok) {
-            alert('Session expired. Please log in again.');
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
-          }
-          return res.json();
-        })
-        .then(data => {
-          console.log('User verified:', data);
-          // Fill other values as needed
-        })
-        .catch(err => {
-          console.error('Token verification failed:', err);
-          window.location.href = 'login.html';
-        });
-      </script>
-      
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script src="script.js">
     </script>
 </body>

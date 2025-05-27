@@ -70,6 +70,7 @@ header{
     border: 1px solid rgba(255, 0, 0, 0.3);
     transition: all 0.3s ease-in-out;
     padding: 10px;
+    user-select: none;
 }
 .card:hover {
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.184);
@@ -688,7 +689,10 @@ header{
         transform: translateX(-50%);
         width: 50%;
         max-height: 400px;
+        user-select: none;
         overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgb(50, 50, 50) rgba(99, 99, 117, 0);
         z-index: 999;
         transition: top 0.4s ease;
         padding: 20px;
@@ -772,18 +776,23 @@ header{
 .notif-btn {
     padding: 6px 12px;
     border: none;
-    border-radius: 8px;
+    border-radius: 15px;
     font-weight: bold;
     cursor: pointer;
+    user-select: none;
     transition: background 0.2s;
 }
 
 .notif-btn.donorAccept {
     background-color: #28a745;
+    border-bottom: 1px solid #22a7ff;
+    border-left: 1px solid rgb(0, 128, 6);
+    border-right: 1px solid rgb(0, 128, 6);
+    box-shadow: inset 0px 0px 3px rgb(255, 255, 255), 0px 0px 5px green ;
     color: white;
 }
 
-.notif-btn.accept:hover {
+.notif-btn.donorAccept:hover {
     background-color: #218838;
 }
 

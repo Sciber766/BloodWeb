@@ -1,55 +1,69 @@
-function redirectTo(page) {
-    window.location.href = page;
-}
 const BASE_URL = 'https://bloodweb-dbackend.onrender.com';
-
+const socket = io(BASE_URL)
+const token = localStorage.getItem('token');
+fetch(`${BASE_URL}/api/user/profile`, {
+    headers: {
+        Authorization: 'Bearer ' + token
+    }
+})
+.then(res => res.json())
+.then(data => {
+    const userId = data._id;
+    socket.emit('join', userId); // join the private room
+});
+socket.on('notification', (data) => {
+    // use your existing function to show the notification
+    createNotification(data.title, data.message, Object.fromEntries(data.details), true);
+  });
+  
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
   });
-
-  function loadData() {
-    const token = localStorage.getItem('token');
+  
+function checkLogin(token) {
     if (!token) {
-      alert('You must be logged in.');
-      window.location.href = 'login.html';
-      return;
-    }
-  
-    const headers = {
-      'Authorization': 'Bearer ' + token,
-      'Content-Type': 'application/json'
-    };
-  
+        alert('You must be logged in.');
+        window.location.href = 'login.html';
+        return;
+    } 
+}
+const headers = {
+    'Authorization': 'Bearer ' + token,
+    'Content-Type': 'application/json'
+};
+
+function loadData() {
+    checkLogin(token);
     // Fetch all data in parallel
     const profilePromise = fetch(`${BASE_URL}/api/user/profile`, { headers })
-      .then(res => {
+        .then(res => {
         if (!res.ok) throw new Error('Failed to fetch profile');
         return res.json();
-      });
-  
+        });
+
     const bloodPromise = fetch(`${BASE_URL}/api/user/blood-details`, { headers })
-      .then(res => {
+        .then(res => {
         if (!res.ok) throw new Error('Failed to fetch blood details');
         return res.json();
-      });
-  
+        });
+
     const emergencyPromise = fetch(`${BASE_URL}/api/user/emergency`, { headers })
-      .then(res => {
+        .then(res => {
         if (!res.ok) throw new Error('Failed to fetch emergency details');
         return res.json();
-      });
-  
+        });
+
     // Combine all promises
     Promise.all([profilePromise, bloodPromise, emergencyPromise])
-      .then(([profileData, bloodDetailsData, emergencyData]) => {
+        .then(([profileData, bloodDetailsData, emergencyData]) => {
         displayProfile(profileData, bloodDetailsData.availability);
         displayBloodDetails(bloodDetailsData);
         displayEmergencyDetails(emergencyData);
-      })
-      .catch(err => {
+    })
+    .catch(err => {
         console.error('Error loading data:', err);
-      });
-  }
+    });
+}
   
 // function to get blood details and display them
 
@@ -173,7 +187,7 @@ let emergencyDisplayFunc ={
 }
 
 function updateAvailability(status) {
-    const token = localStorage.getItem('token');
+    
     fetch(`${BASE_URL}/api/user/availability`, {
         method: 'PATCH',
         headers: {
@@ -189,7 +203,7 @@ function updateAvailability(status) {
 }
 
 function updateEmergencyStatus(status) {
-    const token = localStorage.getItem('token');
+    
     fetch(`${BASE_URL}/api/user/emergency`, {
         method: 'PATCH',
         headers: {
@@ -235,11 +249,8 @@ function formatRequestToArray(request, userName) {
   }
   
 async function fetchMatchingRequests() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('You must be logged in');
-      return [];
-    }
+    
+    checkLogin(token);
   
     try {
       const res = await fetch(`${BASE_URL}/api/request/match`, {
@@ -268,11 +279,8 @@ fetchMatchingRequests().then(requests => {
 });
 
 async function fetchMyRequests() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('You must be logged in');
-      return [];
-    }
+    
+    checkLogin(token);
   
     try {
       const res = await fetch(`${BASE_URL}/api/request/mine`, {
@@ -449,7 +457,7 @@ cancelForm.addEventListener('click', () => {
 requestForm.addEventListener('submit', async (e) => {
     e.preventDefault();
   
-    const token = localStorage.getItem('token');
+    
     if (!token) {
       alert('You must be logged in');
       return;
@@ -624,7 +632,8 @@ function createNotification(title, message, details = {}, showActions = false) {
             <button class="notif-close">&times;</button>
         </div>
         <div class="notif-body">
-            <p>${message}</p>
+         ${message !== undefined ? `<p>${message}</p>` : ''}
+            
             ${
                 Object.keys(details).length
                     ? `<div class="notif-details">` +
@@ -654,7 +663,7 @@ function createNotification(title, message, details = {}, showActions = false) {
 
 // You can test it
 async function fetchNotifications() {
-    const token = localStorage.getItem('token');
+    
     if (!token) return;
   
     try {
@@ -668,9 +677,9 @@ async function fetchNotifications() {
   
       const data = await res.json();
       const notifications = data.notifications;
-  
+      console.log(notifications);
       notifications.forEach(notif => {
-        createNotification(notif.title, notif.message, Object.fromEntries(notif.details || []));
+        createNotification(notif.title, notif.message, notif.details || [], notif.read);
       });
   
     } catch (err) {
@@ -694,7 +703,7 @@ async function fetchNotifications() {
         return;
     }
 
-    const token = localStorage.getItem('token');
+    
     if (!token) {
         alert('You must be logged in.');
         return;
