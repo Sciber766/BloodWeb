@@ -45,7 +45,6 @@
             } catch (err) {
                 console.error('Profile check error:', err.message);
                 localStorage.removeItem('token');
-                message.style.color = 'red';
                 message.textContent = 'Session expired, please login again.';
             }
         }
@@ -54,7 +53,6 @@
         (async () => {
             const token = localStorage.getItem('token');
             if (token) {
-                message.style.color = 'black';
                 message.textContent = 'Checking session...';
                 await checkProfileAndRedirect(token);
             } else {
@@ -65,7 +63,6 @@
         // On login form submit
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            message.style.color = 'black';
             message.textContent = 'Logging in...';
 
             const formData = new FormData(form);
